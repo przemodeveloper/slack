@@ -1,5 +1,7 @@
 import { SvgIconComponent } from "@mui/icons-material";
 import styled from "styled-components";
+import { db } from "../firebase";
+import { addDoc, collection } from "firebase/firestore";
 
 interface SidebarOptionProps {
   Icon?: SvgIconComponent;
@@ -12,7 +14,13 @@ const SidebarOption = ({
   title,
   addChannelOption,
 }: SidebarOptionProps) => {
-  const addChannel = () => {};
+  const addChannel = () => {
+    const channelName = prompt("Please enter the channel name");
+
+    if (channelName) {
+      addDoc(collection(db, "rooms"), { name: channelName });
+    }
+  };
 
   const selectChannel = () => {};
 
