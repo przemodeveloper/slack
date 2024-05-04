@@ -83,7 +83,7 @@ const HeaderRight = styled.div`
 const HeaderAvatar = styled(Avatar)`
   cursor: pointer;
 
-  :hover {
+  &:hover {
     opacity: 0.8;
   }
 `;
