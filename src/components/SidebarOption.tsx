@@ -2,10 +2,13 @@ import { SvgIconComponent } from "@mui/icons-material";
 import styled from "styled-components";
 import { db } from "../firebase";
 import { addDoc, collection } from "firebase/firestore";
+import { useDispatch } from "react-redux";
+import { setRoomId } from "../features/appSlice";
 
 interface SidebarOptionProps {
   Icon?: SvgIconComponent;
   title: string;
+  id?: string;
   addChannelOption?: boolean;
 }
 
@@ -13,7 +16,10 @@ const SidebarOption = ({
   Icon,
   title,
   addChannelOption,
+  id,
 }: SidebarOptionProps) => {
+  const dispatch = useDispatch();
+
   const addChannel = () => {
     const channelName = prompt("Please enter the channel name");
 
@@ -22,7 +28,10 @@ const SidebarOption = ({
     }
   };
 
-  const selectChannel = () => {};
+  const selectChannel = () => {
+    if (!id) return;
+    dispatch(setRoomId(id));
+  };
 
   return (
     <SidebarOptionContainer
@@ -63,4 +72,7 @@ const SidebarOptionContainer = styled.div`
   }
 `;
 
-const SidebarOptionChannel = styled.div``;
+const SidebarOptionChannel = styled.h3`
+  padding: 10px 0;
+  font-weight: 300;
+`;
