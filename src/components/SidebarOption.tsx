@@ -2,8 +2,8 @@ import { SvgIconComponent } from "@mui/icons-material";
 import styled from "styled-components";
 import { db } from "../firebase";
 import { addDoc, collection } from "firebase/firestore";
-import { useDispatch } from "react-redux";
 import { setRoomId } from "../features/appSlice";
+import { useAppDispatch } from "../hooks/hooks";
 
 interface SidebarOptionProps {
   Icon?: SvgIconComponent;
@@ -18,7 +18,7 @@ const SidebarOption = ({
   addChannelOption,
   id,
 }: SidebarOptionProps) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const addChannel = () => {
     const channelName = prompt("Please enter the channel name");
