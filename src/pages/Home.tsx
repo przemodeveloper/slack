@@ -1,18 +1,17 @@
-import { useCollection } from "react-firebase-hooks/firestore";
 import Chat from "../components/Chat";
-import { collection } from "firebase/firestore";
 import { db } from "../firebase";
 import { useAppSelector } from "../hooks/hooks";
+import { doc } from "firebase/firestore";
+import { useDocument } from "react-firebase-hooks/firestore";
 
 const Home = () => {
-  const [channels] = useCollection(collection(db, "rooms"));
   const roomId = useAppSelector((state) => state.app.roomId);
 
-  const roomFound = channels?.docs.find((doc) => doc.id === roomId);
+  const [roomDetails] = useDocument(roomId ? doc(db, "rooms", roomId) : null);
 
-  return (
-    <>{roomFound?.data().name && <Chat roomName={roomFound?.data().name} />}</>
-  );
+  const { name } = roomDetails?.data() || {};
+
+  return <>{name && roomId && <Chat roomName={name} roomId={roomId} />}</>;
 };
 
 export default Home;

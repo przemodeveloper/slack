@@ -1,26 +1,49 @@
 import { InfoOutlined, StarBorderOutlined } from "@mui/icons-material";
 import styled from "styled-components";
+import ChatInput from "./ChatInput";
+import { useCollection } from "react-firebase-hooks/firestore";
+import { collection, query, orderBy } from "firebase/firestore";
+import { db } from "../firebase";
 
 interface ChatProps {
   roomName: string;
+  roomId: string;
 }
 
-const Chat = ({ roomName }: ChatProps) => {
+const Chat = ({ roomName, roomId }: ChatProps) => {
+  const messagesQuery = query(
+    collection(db, "rooms", roomId, "messages"),
+    orderBy("timestamp", "asc")
+  );
+  const [messages] = useCollection(messagesQuery);
+
+  console.log(messages?.docs.map((doc) => doc.data()));
+
   return (
     <ChatContainer>
-      <Header>
-        <HeaderLeft>
-          <h4>
-            <strong>{`# ${roomName}`}</strong>
-          </h4>
-          <StarBorderOutlined />
-        </HeaderLeft>
-        <HeaderRight>
-          <p>
-            <InfoOutlined /> Details
-          </p>
-        </HeaderRight>
-      </Header>
+      <>
+        <Header>
+          <HeaderLeft>
+            <h4>
+              <strong>{`# ${roomName}`}</strong>
+            </h4>
+            <StarBorderOutlined />
+          </HeaderLeft>
+          <HeaderRight>
+            <p>
+              <InfoOutlined /> Details
+            </p>
+          </HeaderRight>
+        </Header>
+
+        <ChatMessages>
+          {messages?.docs.map((doc) => {
+            return <p>{doc.data().message}</p>;
+          })}
+        </ChatMessages>
+
+        <ChatInput roomName={roomName} roomId={roomId} />
+      </>
     </ChatContainer>
   );
 };
@@ -49,6 +72,8 @@ const HeaderLeft = styled.div`
     font-size: 18px;
   }
 `;
+
+const ChatMessages = styled.div``;
 
 const HeaderRight = styled.div`
   > p {
