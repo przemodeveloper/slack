@@ -4,6 +4,8 @@ import ChatInput from "./ChatInput";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { collection, query, orderBy } from "firebase/firestore";
 import { db } from "../firebase";
+import Message from "./Message";
+import { useEffect, useRef } from "react";
 
 interface ChatProps {
   roomName: string;
@@ -11,37 +13,55 @@ interface ChatProps {
 }
 
 const Chat = ({ roomName, roomId }: ChatProps) => {
+  const chatRef = useRef<HTMLDivElement>(null);
   const messagesQuery = query(
     collection(db, "rooms", roomId, "messages"),
     orderBy("timestamp", "asc")
   );
-  const [messages] = useCollection(messagesQuery);
+  const [messages, loading] = useCollection(messagesQuery);
+
+  useEffect(() => {
+    chatRef?.current?.scrollIntoView({
+      behavior: "smooth",
+    });
+  }, [roomId, loading]);
 
   return (
     <ChatContainer>
-      <>
-        <Header>
-          <HeaderLeft>
-            <h4>
-              <strong>{`# ${roomName}`}</strong>
-            </h4>
-            <StarBorderOutlined />
-          </HeaderLeft>
-          <HeaderRight>
-            <p>
-              <InfoOutlined /> Details
-            </p>
-          </HeaderRight>
-        </Header>
+      {roomName && roomId && (
+        <>
+          <Header>
+            <HeaderLeft>
+              <h4>
+                <strong>{`# ${roomName}`}</strong>
+              </h4>
+              <StarBorderOutlined />
+            </HeaderLeft>
+            <HeaderRight>
+              <p>
+                <InfoOutlined /> Details
+              </p>
+            </HeaderRight>
+          </Header>
 
-        <ChatMessages>
-          {messages?.docs.map((doc) => {
-            return <p key={doc.data().timestamp}>{doc.data().message}</p>;
-          })}
-        </ChatMessages>
+          <ChatMessages>
+            {messages?.docs.map((doc) => {
+              return (
+                <Message
+                  key={doc.id}
+                  message={doc.data().message}
+                  timestamp={doc.data().timestamp}
+                  userName={doc.data().userName}
+                  userImage={doc.data().userImage}
+                />
+              );
+            })}
+            <ChatBottom ref={chatRef} />
+          </ChatMessages>
 
-        <ChatInput roomName={roomName} roomId={roomId} />
-      </>
+          <ChatInput chatRef={chatRef} roomName={roomName} roomId={roomId} />
+        </>
+      )}
     </ChatContainer>
   );
 };
@@ -69,6 +89,10 @@ const HeaderLeft = styled.div`
     margin-left: 20px;
     font-size: 18px;
   }
+`;
+
+const ChatBottom = styled.div`
+  padding-bottom: 200px;
 `;
 
 const ChatMessages = styled.div``;

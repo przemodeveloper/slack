@@ -7,9 +7,10 @@ import { Button } from "@mui/material";
 interface ChatInput {
   roomId: string;
   roomName: string;
+  chatRef: React.RefObject<HTMLDivElement>;
 }
 
-const ChatInput = ({ roomId, roomName }: ChatInput) => {
+const ChatInput = ({ roomId, roomName, chatRef }: ChatInput) => {
   const [text, setText] = useState("");
 
   const handleSubmit = (
@@ -29,8 +30,11 @@ const ChatInput = ({ roomId, roomName }: ChatInput) => {
         "https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png",
     });
 
+    chatRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
+
     setText("");
-    // TO DO: Send message to the server
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
