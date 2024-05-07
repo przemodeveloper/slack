@@ -17,8 +17,6 @@ const Chat = ({ roomName, roomId }: ChatProps) => {
   );
   const [messages] = useCollection(messagesQuery);
 
-  console.log(messages?.docs.map((doc) => doc.data()));
-
   return (
     <ChatContainer>
       <>
@@ -38,7 +36,7 @@ const Chat = ({ roomName, roomId }: ChatProps) => {
 
         <ChatMessages>
           {messages?.docs.map((doc) => {
-            return <p>{doc.data().message}</p>;
+            return <p key={doc.data().timestamp}>{doc.data().message}</p>;
           })}
         </ChatMessages>
 
