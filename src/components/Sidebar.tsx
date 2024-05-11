@@ -17,18 +17,23 @@ import { collection } from "firebase/firestore";
 import { useCollection } from "react-firebase-hooks/firestore";
 import SidebarOption from "./SidebarOption";
 import { db } from "../firebase";
+import { useAppSelector } from "../hooks/hooks";
+import { User } from "firebase/auth";
 
 const Sidebar = () => {
   const [channels] = useCollection(collection(db, "rooms"));
+  const user = useAppSelector((state) => state.login?.userData?.user);
+
+  const { displayName, email } = user as User;
 
   return (
     <SidebarContainer>
       <SidebarHeader>
         <SidebarInfo>
-          <h2>Przemek</h2>
+          <h2>{displayName}</h2>
           <h3>
             <FiberManualRecord />
-            przemek_dev
+            {email}
           </h3>
         </SidebarInfo>
         <Create />

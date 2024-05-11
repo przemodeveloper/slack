@@ -1,13 +1,18 @@
 import { AccessTime, HelpOutline, Search } from "@mui/icons-material";
 import { Avatar } from "@mui/material";
 import styled from "styled-components";
+import { useAppSelector } from "../hooks/hooks";
+import { User } from "firebase/auth";
 
 const Header = () => {
+  const user = useAppSelector((state) => state.login?.userData?.user);
+  const { photoURL } = user as User;
+
   return (
     <HeaderContainer>
       {/* Header left part */}
       <HeaderLeft>
-        <HeaderAvatar />
+        {photoURL ? <HeaderAvatar src={photoURL} /> : <HeaderAvatar />}
         <AccessTime />
       </HeaderLeft>
       {/* Header search */}

@@ -3,6 +3,8 @@ import { useState } from "react";
 import styled from "styled-components";
 import { db } from "../firebase";
 import { Button } from "@mui/material";
+import { useAppSelector } from "../hooks/hooks";
+import { User } from "firebase/auth";
 
 interface ChatInput {
   roomId: string;
@@ -12,6 +14,10 @@ interface ChatInput {
 
 const ChatInput = ({ roomId, roomName, chatRef }: ChatInput) => {
   const [text, setText] = useState("");
+
+  const user = useAppSelector((state) => state.login?.userData?.user);
+
+  const { photoURL, displayName } = user as User;
 
   const handleSubmit = (
     event:
@@ -25,9 +31,8 @@ const ChatInput = ({ roomId, roomName, chatRef }: ChatInput) => {
     addDoc(collection(db, "rooms", roomId, "messages"), {
       message: text,
       timestamp: serverTimestamp(),
-      userName: "Przemek",
-      userImage:
-        "https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png",
+      userName: displayName,
+      userImage: photoURL,
     });
 
     chatRef.current?.scrollIntoView({
