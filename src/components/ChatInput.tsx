@@ -1,10 +1,9 @@
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { useState } from "react";
 import styled from "styled-components";
-import { db } from "../firebase";
+import { auth, db } from "../firebase";
 import { Button } from "@mui/material";
-import { useAppSelector } from "../hooks/hooks";
-import { User } from "firebase/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 interface ChatInput {
   roomId: string;
@@ -15,9 +14,7 @@ interface ChatInput {
 const ChatInput = ({ roomId, roomName, chatRef }: ChatInput) => {
   const [text, setText] = useState("");
 
-  const user = useAppSelector((state) => state.login?.userData?.user);
-
-  const { photoURL, displayName } = user as User;
+  const [user] = useAuthState(auth);
 
   const handleSubmit = (
     event:
@@ -31,8 +28,8 @@ const ChatInput = ({ roomId, roomName, chatRef }: ChatInput) => {
     addDoc(collection(db, "rooms", roomId, "messages"), {
       message: text,
       timestamp: serverTimestamp(),
-      userName: displayName,
-      userImage: photoURL,
+      userName: user?.displayName,
+      userImage: user?.photoURL,
     });
 
     chatRef.current?.scrollIntoView({

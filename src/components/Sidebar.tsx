@@ -16,24 +16,21 @@ import styled from "styled-components";
 import { collection } from "firebase/firestore";
 import { useCollection } from "react-firebase-hooks/firestore";
 import SidebarOption from "./SidebarOption";
-import { db } from "../firebase";
-import { useAppSelector } from "../hooks/hooks";
-import { User } from "firebase/auth";
+import { auth, db } from "../firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const Sidebar = () => {
   const [channels] = useCollection(collection(db, "rooms"));
-  const user = useAppSelector((state) => state.login?.userData?.user);
-
-  const { displayName, email } = user as User;
+  const [user] = useAuthState(auth);
 
   return (
     <SidebarContainer>
       <SidebarHeader>
         <SidebarInfo>
-          <h2>{displayName}</h2>
+          <h2>{user?.displayName}</h2>
           <h3>
             <FiberManualRecord />
-            {email}
+            {user?.email}
           </h3>
         </SidebarInfo>
         <Create />
