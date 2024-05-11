@@ -20,9 +20,11 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => {
-  const [user] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
 
-  return <>{!user ? <Login /> : <RouterProvider router={router} />}</>;
+  return (
+    <>{!user && !loading ? <Login /> : <RouterProvider router={router} />}</>
+  );
 };
 
 export default App;
