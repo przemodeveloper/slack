@@ -5,7 +5,7 @@ import { getFirestore } from "firebase/firestore";
 import { GoogleAuthProvider, getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCcCW1VN_6ztR5ooGsagNqTgc4FA8bSuuY",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: "slack-e2df1.firebaseapp.com",
   projectId: "slack-e2df1",
   storageBucket: "slack-e2df1.appspot.com",
@@ -13,6 +13,8 @@ const firebaseConfig = {
   appId: "1:1030226424983:web:94758b36109a29e745e5d2",
   measurementId: "G-PG7NN95DJW",
 };
+
+console.log(import.meta.env);
 
 const app = initializeApp(firebaseConfig);
 

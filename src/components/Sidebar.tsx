@@ -64,7 +64,7 @@ const SidebarContainer = styled.div`
   margin-top: 60px;
   color: white;
   flex: 0.3;
-  max-width: 260px;
+  max-width: 270px;
   border-top: 1px solid #49274b;
 
   > hr {
@@ -76,6 +76,7 @@ const SidebarContainer = styled.div`
 
 const SidebarHeader = styled.div`
   display: flex;
+  align-items: center;
   border-bottom: 1px solid #49274b;
   padding: 13px;
 
