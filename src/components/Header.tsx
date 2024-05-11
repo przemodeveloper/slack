@@ -9,7 +9,6 @@ const Header = () => {
 
   return (
     <HeaderContainer>
-      {/* Header left part */}
       <HeaderLeft>
         {user?.photoURL ? (
           <HeaderAvatar src={user?.photoURL} />
@@ -18,12 +17,10 @@ const Header = () => {
         )}
         <AccessTime />
       </HeaderLeft>
-      {/* Header search */}
       <HeaderSearch>
         <Search />
         <input placeholder="Search" />
       </HeaderSearch>
-      {/* Header right part */}
       <HeaderRight>
         <HelpOutline />
       </HeaderRight>

@@ -2,17 +2,12 @@ import { Button } from "@mui/material";
 import styled from "styled-components";
 import { auth, provider } from "../firebase";
 import { signInWithPopup } from "firebase/auth";
-import { useAppDispatch } from "../hooks/hooks";
-import { setUser } from "../features/authSlice";
 
 const Login = () => {
-  const dispatch = useAppDispatch();
-
   const signIn = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     try {
-      const result = await signInWithPopup(auth, provider);
-      dispatch(setUser(result));
+      await signInWithPopup(auth, provider);
     } catch (error) {
       const err = error as Error;
       throw new Error(err.message);
