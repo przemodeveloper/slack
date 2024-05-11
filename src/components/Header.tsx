@@ -1,20 +1,29 @@
-import { AccessTime, HelpOutline, Search } from "@mui/icons-material";
+import { AccessTime, HelpOutline, Logout, Search } from "@mui/icons-material";
 import { Avatar } from "@mui/material";
 import styled from "styled-components";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../firebase";
+import { signOut } from "firebase/auth";
 
 const Header = () => {
   const [user] = useAuthState(auth);
 
+  const logout = () => {
+    signOut(auth);
+  };
+
   return (
     <HeaderContainer>
       <HeaderLeft>
-        {user?.photoURL ? (
-          <HeaderAvatar src={user?.photoURL} />
-        ) : (
-          <HeaderAvatar />
-        )}
+        <HeaderLeftInnerContainer>
+          {user?.photoURL ? (
+            <HeaderAvatar src={user?.photoURL} />
+          ) : (
+            <HeaderAvatar />
+          )}
+          <Logout onClick={logout} />
+        </HeaderLeftInnerContainer>
+
         <AccessTime />
       </HeaderLeft>
       <HeaderSearch>
@@ -49,6 +58,14 @@ const HeaderSearch = styled.div`
     outline: none;
     color: white;
   }
+`;
+
+const HeaderLeftInnerContainer = styled.div`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  justify-content: center;
+  gap: 15px;
 `;
 
 const HeaderContainer = styled.div`
